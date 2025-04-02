@@ -1,3 +1,4 @@
+import { login, register } from "./auth/auth.controller";
 import {
   createLevelController,
   deleteLevelController,
@@ -20,7 +21,6 @@ import {
   updateSectionController,
 } from "./section/section.controller";
 import {
-  createUserController,
   deleteUserController,
   getAllUserController,
   getUserByIdController,
@@ -28,7 +28,6 @@ import {
 } from "./user/user.controller";
 
 export {
-  createUserController,
   getAllUserController,
   getUserByIdController,
   updateUserController,
@@ -48,4 +47,6 @@ export {
   getQuestionByIdController,
   updateQuestionController,
   deleteQuestionController,
+  register,
+  login,
 };

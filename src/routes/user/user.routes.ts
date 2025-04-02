@@ -7,12 +7,13 @@ import {
   updateUserController,
 } from "../../controllers";
 
+import { authMiddleware } from "../../middlewares/auth.middleware";
+
 const routerUser = Router();
 
-routerUser.post("/", createUserController);
-routerUser.get("/", getAllUserController);
-routerUser.get("/:id", getUserByIdController);
-routerUser.put("/:id", updateUserController);
-routerUser.delete("/:id", deleteUserController);
+routerUser.get("/", authMiddleware, getAllUserController);
+routerUser.get("/:id", authMiddleware, getUserByIdController);
+routerUser.put("/:id", authMiddleware, updateUserController);
+routerUser.delete("/:id", authMiddleware, deleteUserController);
 
 export default routerUser;
