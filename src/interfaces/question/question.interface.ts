@@ -1,6 +1,7 @@
 import { Document, Types } from "mongoose";
 
 export interface IQuestion extends Document {
+  title: string;
   text: string;
   answer: string;
   response_1: string;
@@ -9,6 +10,7 @@ export interface IQuestion extends Document {
   response_4: string;
   correctResponse: string;
   type: string;
+  order: number;
   points: number;
   createdAt: Date;
   section: Types.ObjectId;

@@ -1,6 +1,5 @@
 import { Router } from "express";
 import {
-  createUserController,
   deleteUserController,
   getAllUserController,
   getUserByIdController,

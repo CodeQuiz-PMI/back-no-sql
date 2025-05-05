@@ -32,5 +32,13 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     }
   );
 
-  res.json({ token });
+  res.json({
+	token,
+	user: {
+	  id: user._id,
+	  name: user.name,
+	  email: user.email,
+	  currentLevel: user.currentLevel || "Fase 1",
+	},
+  });
 };

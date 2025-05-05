@@ -4,9 +4,9 @@ export interface IUser extends Document {
     name: string;
     email: string;
     password: string;
-    currentLevel: number;
-    currentSection: number;
-    currentQuestion: number;
+    currentLevel: string;
+    currentSection: string;
+    currentQuestion: string;
     trophies: number;
     totalPoints: number;
     createdAt: Date;
