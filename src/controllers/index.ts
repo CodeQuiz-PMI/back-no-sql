@@ -12,6 +12,7 @@ import {
   getAllQuestionController,
   getQuestionByIdController,
   updateQuestionController,
+  codeQuestionController
 } from "./question/question.controller";
 import {
   createSectionController,
@@ -47,6 +48,7 @@ export {
   getQuestionByIdController,
   updateQuestionController,
   deleteQuestionController,
+  codeQuestionController,
   register,
   login,
 };

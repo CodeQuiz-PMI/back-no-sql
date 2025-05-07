@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Question } from "../../models";
+import axios from "axios";
 
 export const createQuestionController = async (req: Request, res: Response) => {
   try {
@@ -36,3 +37,20 @@ export const deleteQuestionController = async (req: Request, res: Response) => {
   await Question.findByIdAndDelete(req.params.id);
   res.status(204).send();
 };
+
+export const codeQuestionController = async (req: Request, res: Response) => {
+	const { code, language = "python" } = req.body;
+
+	try {
+	  const pistonResponse = await axios.post("https://emkc.org/api/v2/piston/execute", {
+		language,
+		version: "*",
+		files: [{ name: "main.py", content: code }],
+	  });
+  
+	  return res.json(pistonResponse.data);
+	} catch (err) {
+	  console.error("Erro ao chamar Piston:", err);
+	  return res.status(500).json({ error: "Erro ao executar código" });
+	}
+  };

@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  codeQuestionController,
   createQuestionController,
   deleteQuestionController,
   getAllQuestionController,
@@ -14,5 +15,7 @@ routerQuestion.get("/", getAllQuestionController);
 routerQuestion.get("/:id", getQuestionByIdController);
 routerQuestion.put("/:id", updateQuestionController);
 routerQuestion.delete("/:id", deleteQuestionController);
+
+routerQuestion.post("/code", codeQuestionController);
 
 export default routerQuestion;
