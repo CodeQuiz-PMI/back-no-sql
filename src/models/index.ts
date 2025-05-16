@@ -1,3 +1,4 @@
+import { AnswerLog } from "./answerLog/answerLog.model";
 import { Level } from "./level/level.model";
 import { Question } from "./question/question.model";
 import { Section } from "./section/section.model";
@@ -7,5 +8,6 @@ export {
     User,
     Level,
     Section,
-    Question
+    Question,
+	AnswerLog
 }

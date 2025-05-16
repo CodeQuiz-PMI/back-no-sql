@@ -1,4 +1,5 @@
 import { Document, Types } from "mongoose";
+import { ISection } from "..";
 
 export interface IQuestion extends Document {
   title: string;
@@ -14,4 +15,8 @@ export interface IQuestion extends Document {
   points: number;
   createdAt: Date;
   section: Types.ObjectId;
+}
+
+export interface QuestionWithPopulatedSection extends Omit<IQuestion, "section"> {
+	section: ISection;
 }

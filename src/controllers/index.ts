@@ -1,4 +1,5 @@
 import { login, register } from "./auth/auth.controller";
+
 import {
   createLevelController,
   deleteLevelController,
@@ -6,14 +7,16 @@ import {
   getLevelByIdController,
   updateLevelController,
 } from "./level/level.controller";
+
 import {
   createQuestionController,
   deleteQuestionController,
   getAllQuestionController,
   getQuestionByIdController,
   updateQuestionController,
-  codeQuestionController
+  codeQuestionController,
 } from "./question/question.controller";
+
 import {
   createSectionController,
   deleteSectionController,
@@ -21,12 +24,19 @@ import {
   getSectionByIdController,
   updateSectionController,
 } from "./section/section.controller";
+
 import {
   deleteUserController,
   getAllUserController,
   getUserByIdController,
   updateUserController,
 } from "./user/user.controller";
+
+import {
+  getAllAnswerLogsController,
+  getAnswerLogsByUser,
+  submitAnswerController,
+} from "./answerLog/answerLog.controller";
 
 export {
   getAllUserController,
@@ -51,4 +61,7 @@ export {
   codeQuestionController,
   register,
   login,
+  submitAnswerController,
+  getAllAnswerLogsController,
+  getAnswerLogsByUser,
 };
