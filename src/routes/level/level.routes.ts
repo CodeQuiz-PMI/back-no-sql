@@ -6,13 +6,14 @@ import {
   getLevelByIdController,
   updateLevelController,
 } from "../../controllers";
+import { asyncHandler } from "../../controllers/asyncHandler";
 
 const routerLevel = Router();
 
-routerLevel.post("/", createLevelController);
-routerLevel.get("/", getAllLevelController);
-routerLevel.get("/:id", getLevelByIdController);
-routerLevel.put("/:id", updateLevelController);
-routerLevel.delete("/:id", deleteLevelController);
+routerLevel.post("/", asyncHandler(createLevelController));
+routerLevel.get("/", asyncHandler(getAllLevelController));
+routerLevel.get("/:id", asyncHandler(getLevelByIdController));
+routerLevel.put("/:id", asyncHandler(updateLevelController));
+routerLevel.delete("/:id", asyncHandler(deleteLevelController));
 
 export default routerLevel;

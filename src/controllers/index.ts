@@ -14,7 +14,6 @@ import {
   getAllQuestionController,
   getQuestionByIdController,
   updateQuestionController,
-  codeQuestionController,
 } from "./question/question.controller";
 
 import {
@@ -33,6 +32,7 @@ import {
 } from "./user/user.controller";
 
 import {
+  deleteAllAnswerLogsByUser,
   getAllAnswerLogsController,
   getAnswerLogsByUser,
   submitAnswerController,
@@ -58,10 +58,10 @@ export {
   getQuestionByIdController,
   updateQuestionController,
   deleteQuestionController,
-  codeQuestionController,
   register,
   login,
   submitAnswerController,
   getAllAnswerLogsController,
   getAnswerLogsByUser,
+  deleteAllAnswerLogsByUser,
 };

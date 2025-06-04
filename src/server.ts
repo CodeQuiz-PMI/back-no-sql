@@ -1,7 +1,7 @@
 import { connectDatabase } from "./db";
 import app from "./app";
 
-const PORT = process.env.PORT || 4000;
+const PORT = Number(process.env.PORT) || 4000;
 
 const startServer = async () => {
   await connectDatabase();

@@ -1,21 +1,21 @@
 import { Router } from "express";
 import {
-  codeQuestionController,
   createQuestionController,
   deleteQuestionController,
   getAllQuestionController,
   getQuestionByIdController,
   updateQuestionController,
 } from "../../controllers";
+import { asyncHandler } from "../../controllers/asyncHandler";
 
 const routerQuestion = Router();
 
-routerQuestion.post("/", createQuestionController);
-routerQuestion.get("/", getAllQuestionController);
-routerQuestion.get("/:id", getQuestionByIdController);
-routerQuestion.put("/:id", updateQuestionController);
-routerQuestion.delete("/:id", deleteQuestionController);
+routerQuestion.post("/", asyncHandler(createQuestionController));
+routerQuestion.get("/", asyncHandler(getAllQuestionController));
+routerQuestion.get("/:id", asyncHandler(getQuestionByIdController));
+routerQuestion.put("/:id", asyncHandler(updateQuestionController));
+routerQuestion.delete("/:id", asyncHandler(deleteQuestionController));
 
-routerQuestion.post("/code", codeQuestionController);
+// routerQuestion.post("/code", codeQuestionController);
 
 export default routerQuestion;

@@ -6,13 +6,14 @@ import {
   getSectionByIdController,
   updateSectionController,
 } from "../../controllers";
+import { asyncHandler } from "../../controllers/asyncHandler";
 
 const routerSection = Router();
 
-routerSection.post("/", createSectionController);
-routerSection.get("/", getAllSectionController);
-routerSection.get("/:id", getSectionByIdController);
-routerSection.put("/:id", updateSectionController);
-routerSection.delete("/:id", deleteSectionController);
+routerSection.post("/", asyncHandler(createSectionController));
+routerSection.get("/", asyncHandler(getAllSectionController));
+routerSection.get("/:id", asyncHandler(getSectionByIdController));
+routerSection.put("/:id", asyncHandler(updateSectionController));
+routerSection.delete("/:id", asyncHandler(deleteSectionController));
 
 export default routerSection;

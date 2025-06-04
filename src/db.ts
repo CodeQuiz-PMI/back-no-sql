@@ -3,9 +3,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const MONGO_URI = process.env.MONGO_URI as string;
-
 export const connectDatabase = async (): Promise<void> => {
+  const MONGO_URI = process.env.MONGO_URI as string;
   if (!MONGO_URI) {
     console.error("❌ MONGO_URI não definida no .env");
     process.exit(1);
