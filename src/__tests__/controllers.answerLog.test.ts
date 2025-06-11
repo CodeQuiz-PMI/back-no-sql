@@ -29,7 +29,7 @@ describe("Answer Controllers", () => {
   });
 
   describe("submitAnswerController", () => {
-    it("should return 404 if question not found", async () => {
+    it("Deve retornar 404 se a questão não for encontrada", async () => {
       jest.spyOn(Question, "findById").mockReturnValue({
         exec: jest.fn().mockResolvedValue(null),
       } as any);
@@ -50,7 +50,7 @@ describe("Answer Controllers", () => {
       });
     });
 
-    it("should return 404 if section not found", async () => {
+    it("Deve retornar 404 se a seção não for encontrada", async () => {
       const questionId = new Types.ObjectId();
       const sectionId = new Types.ObjectId();
 
@@ -85,7 +85,7 @@ describe("Answer Controllers", () => {
       });
     });
 
-    it("should return 404 if level not found", async () => {
+    it("Deve retornar 404 se o nível não for encontrado", async () => {
       const questionId = new Types.ObjectId();
       const sectionId = new Types.ObjectId();
       const levelId = new Types.ObjectId();
@@ -130,7 +130,7 @@ describe("Answer Controllers", () => {
       });
     });
 
-    it("should save answer log and update user points when answer is correct", async () => {
+    it("Deve salvar o log da resposta e atualizar pontos do usuário quando a resposta estiver correta", async () => {
       const questionId = new Types.ObjectId();
       const sectionId = new Types.ObjectId();
       const levelId = new Types.ObjectId();
@@ -211,7 +211,7 @@ describe("Answer Controllers", () => {
       });
     });
 
-    it("should handle incorrect answer with zero points", async () => {
+    it("Deve tratar resposta errada com 0 pontos", async () => {
       const questionId = new Types.ObjectId();
       const sectionId = new Types.ObjectId();
       const levelId = new Types.ObjectId();
@@ -286,7 +286,7 @@ describe("Answer Controllers", () => {
       });
     });
 
-    it("should handle internal error gracefully", async () => {
+    it("Deve tratar erro interno de forma apropriada", async () => {
       jest.spyOn(Question, "findById").mockImplementation(() => {
         throw new Error("Unexpected error");
       });
@@ -308,7 +308,7 @@ describe("Answer Controllers", () => {
   });
 
   describe("getAllAnswerLogsController", () => {
-    it("should return all logs", async () => {
+    it("Deve retornar todos os logs", async () => {
       const logsMock = [{}, {}];
 
       const populateChainMock = {
@@ -327,7 +327,7 @@ describe("Answer Controllers", () => {
       expect(res.json).toHaveBeenCalledWith(logsMock);
     });
 
-    it("should handle error", async () => {
+    it("Deve lidar com erro", async () => {
       const populateChainMock = {
         populate: jest.fn().mockReturnThis(),
         then: jest.fn((_resolve: any, reject: any) =>
@@ -350,7 +350,7 @@ describe("Answer Controllers", () => {
   });
 
   describe("getAnswerLogsByUser", () => {
-    it("should return logs by userId", async () => {
+    it("Deve retornar logs pelo userId", async () => {
       const logsMock = [{}, {}];
 
       jest.spyOn(AnswerLog, "find").mockResolvedValue(logsMock);
@@ -364,7 +364,7 @@ describe("Answer Controllers", () => {
       expect(res.json).toHaveBeenCalledWith(logsMock);
     });
 
-    it("should handle error", async () => {
+    it("Deve lidar com erro", async () => {
       jest.spyOn(AnswerLog, "find").mockRejectedValue(new Error("DB error"));
 
       const req = mockRequest({}, { userId: "user123" });
@@ -380,7 +380,7 @@ describe("Answer Controllers", () => {
   });
 
   describe("deleteAllAnswerLogsByUser", () => {
-    it("should delete logs and reset user progress", async () => {
+    it("Deve excluir os logs e resetar o progresso do usuário", async () => {
       jest.spyOn(AnswerLog, "deleteMany").mockResolvedValue({
         acknowledged: true,
         deletedCount: 2,
@@ -412,7 +412,7 @@ describe("Answer Controllers", () => {
       });
     });
 
-    it("should handle error", async () => {
+    it("Deve lidar com erro", async () => {
       jest
         .spyOn(AnswerLog, "deleteMany")
         .mockRejectedValue(new Error("DB error"));

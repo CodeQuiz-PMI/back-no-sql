@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import routerUser from "../routes/user/user.routes";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import {
@@ -23,52 +24,45 @@ jest.mock("../controllers", () => ({
 }));
 
 describe("routerUser", () => {
-  it("should be an Express router", () => {
+  it("Deve ser um router do Express", () => {
     expect(routerUser).toBeDefined();
     expect(typeof routerUser).toBe("function");
     expect(routerUser.stack).toBeDefined();
   });
 
-  it("should define GET /", () => {
+  it("Deve definir GET /", () => {
     const route = routerUser.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/" && r.route.methods.get
     );
     expect(route).toBeDefined();
     expect(route?.route?.stack[0].handle).toBe(getAllUserController);
   });
 
-  it("should define GET /:id with authMiddleware and asyncHandler", () => {
+  it("Deve definir GET /:id com authMiddleware e asyncHandler", () => {
     const route = routerUser.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/:id" && r.route.methods.get
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(authMiddleware);
     expect(middlewares).toContain(getUserByIdController);
   });
 
-  it("should define PATCH /:id with authMiddleware and asyncHandler", () => {
+  it("Deve definir PATCH /:id com authMiddleware e asyncHandler", () => {
     const route = routerUser.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/:id" && r.route.methods.patch
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(authMiddleware);
     expect(middlewares).toContain(updateUserController);
   });
 
-  it("should define DELETE /:id with authMiddleware and asyncHandler", () => {
+  it("Deve definir DELETE /:id com authMiddleware e asyncHandler", () => {
     const route = routerUser.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/:id" && r.route.methods.delete
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(authMiddleware);
     expect(middlewares).toContain(deleteUserController);

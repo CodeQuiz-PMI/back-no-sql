@@ -9,12 +9,12 @@ jest.mock("../db", () => ({
   connectDatabase: jest.fn(),
 }));
 
-describe("Server initialization", () => {
+describe("Inicialização do Servidor", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should call connectDatabase and app.listen with default port", async () => {
+  it("Deve chamar connectDatabase e app.listen com a porta padrão", async () => {
     await jest.isolateModulesAsync(async () => {
       await import("../server");
     });
@@ -22,7 +22,7 @@ describe("Server initialization", () => {
     expect(app.listen).toHaveBeenCalledWith(4000, expect.any(Function));
   });
 
-  it("should use the port from environment variables if set", async () => {
+  it("Deve usar a porta definida nas variáveis de ambiente se estiver configurada", async () => {
     process.env.PORT = "5000";
     await jest.isolateModulesAsync(async () => {
       await import("../server");
@@ -31,7 +31,7 @@ describe("Server initialization", () => {
     delete process.env.PORT;
   });
 
-  it("should log server start message", async () => {
+  it("Deve registrar mensagem de início do servidor", async () => {
     const consoleLogSpy = jest
       .spyOn(console, "log")
       .mockImplementation(() => {});

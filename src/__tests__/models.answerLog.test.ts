@@ -10,8 +10,8 @@ jest.mock("mongoose", () => {
   };
 });
 
-describe("AnswerLog model", () => {
-  it("should define the AnswerLog model with correct name and schema", () => {
+describe("Modelo AnswerLog", () => {
+  it("Deve definir o modelo AnswerLog com o nome e o schema corretos", () => {
     expect(mongooseModel).toHaveBeenCalledWith("AnswerLog", AnswerLogSchema);
   });
 });

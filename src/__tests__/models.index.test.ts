@@ -5,8 +5,8 @@ import { Section } from "../models/section/section.model";
 import { Question } from "../models/question/question.model";
 import { AnswerLog } from "../models/answerLog/answerLog.model";
 
-describe("Models index", () => {
-  it("should export all models correctly", () => {
+describe("Índice de Models", () => {
+  it("Deve exportar todos os models corretamente", () => {
     expect(models.User).toBe(User);
     expect(models.Level).toBe(Level);
     expect(models.Section).toBe(Section);

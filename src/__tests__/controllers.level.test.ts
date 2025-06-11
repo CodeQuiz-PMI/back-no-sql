@@ -18,7 +18,7 @@ jest.mock("../models", () => ({
   },
 }));
 
-describe("Level Controller", () => {
+describe("Controlador de Níveis", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let statusMock: jest.Mock;
@@ -46,8 +46,8 @@ describe("Level Controller", () => {
   });
 
   describe("createLevelController", () => {
-    it("should create a level and return 201", async () => {
-      const mockLevel = { id: "1", title: "Test Level" };
+    it("Deve criar um nível e retornar 201", async () => {
+      const mockLevel = { id: "1", title: "Nível de Teste" };
       (Level.create as jest.Mock).mockResolvedValue(mockLevel);
 
       await createLevelController(req as Request, res as Response);
@@ -57,17 +57,17 @@ describe("Level Controller", () => {
       expect(jsonMock).toHaveBeenCalledWith(mockLevel);
     });
 
-    it("should handle errors (instanceof Error)", async () => {
-      (Level.create as jest.Mock).mockRejectedValue(new Error("DB error"));
+    it("Deve tratar erros (instanceof Error)", async () => {
+      (Level.create as jest.Mock).mockRejectedValue(new Error("Erro no banco"));
 
       await createLevelController(req as Request, res as Response);
 
       expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({ error: "DB error" });
+      expect(jsonMock).toHaveBeenCalledWith({ error: "Erro no banco" });
     });
 
-    it("should handle non-Error thrown values", async () => {
-      (Level.create as jest.Mock).mockRejectedValue("unexpected error");
+    it("Deve tratar valores lançados que não são Error", async () => {
+      (Level.create as jest.Mock).mockRejectedValue("erro inesperado");
 
       await createLevelController(req as Request, res as Response);
 
@@ -77,7 +77,7 @@ describe("Level Controller", () => {
   });
 
   describe("getAllLevelController", () => {
-    it("should return all levels", async () => {
+    it("Deve retornar todos os níveis", async () => {
       const mockLevels = [{ id: "1" }, { id: "2" }];
       (Level.find as jest.Mock).mockResolvedValue(mockLevels);
 
@@ -90,7 +90,7 @@ describe("Level Controller", () => {
   });
 
   describe("getLevelByIdController", () => {
-    it("should return level if found", async () => {
+    it("Deve retornar o nível se encontrado", async () => {
       const mockLevel = { id: "1" };
       (Level.findById as jest.Mock).mockResolvedValue(mockLevel);
 
@@ -102,7 +102,7 @@ describe("Level Controller", () => {
       expect(jsonMock).toHaveBeenCalledWith(mockLevel);
     });
 
-    it("should return 404 if level not found", async () => {
+    it("Deve retornar 404 se o nível não for encontrado", async () => {
       (Level.findById as jest.Mock).mockResolvedValue(null);
 
       req.params = { id: "1" };
@@ -114,18 +114,18 @@ describe("Level Controller", () => {
   });
 
   describe("updateLevelController", () => {
-    it("should update level and return 201", async () => {
-      const updatedLevel = { id: "1", title: "Updated" };
+    it("Deve atualizar o nível e retornar 201", async () => {
+      const updatedLevel = { id: "1", title: "Atualizado" };
       (Level.findByIdAndUpdate as jest.Mock).mockResolvedValue(updatedLevel);
 
       req.params = { id: "1" };
-      req.body = { title: "Updated" };
+      req.body = { title: "Atualizado" };
 
       await updateLevelController(req as Request, res as Response);
 
       expect(Level.findByIdAndUpdate).toHaveBeenCalledWith(
         "1",
-        { title: "Updated" },
+        { title: "Atualizado" },
         { new: true }
       );
       expect(statusMock).toHaveBeenCalledWith(201);
@@ -134,7 +134,7 @@ describe("Level Controller", () => {
   });
 
   describe("deleteLevelController", () => {
-    it("should delete level and return 204", async () => {
+    it("Deve excluir o nível e retornar 204", async () => {
       (Level.findByIdAndDelete as jest.Mock).mockResolvedValue({});
 
       req.params = { id: "1" };

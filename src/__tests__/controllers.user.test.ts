@@ -24,7 +24,7 @@ jest.mock("bcryptjs", () => ({
   hash: jest.fn(),
 }));
 
-describe("User Controller", () => {
+describe("Controlador de Usuário", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let statusMock: jest.Mock;
@@ -55,7 +55,7 @@ describe("User Controller", () => {
   });
 
   describe("getAllUserController", () => {
-    it("should return all users with status 201", async () => {
+    it("Deve retornar todos os usuários com status 201", async () => {
       const mockUsers = [{ id: "1" }, { id: "2" }];
       (User.find as jest.Mock).mockResolvedValue(mockUsers);
 
@@ -68,7 +68,7 @@ describe("User Controller", () => {
   });
 
   describe("getUserByIdController", () => {
-    it("should return user if found", async () => {
+    it("Deve retornar o usuário se encontrado", async () => {
       req.params = { id: "1" };
       const mockUser = { id: "1" };
       (User.findById as jest.Mock).mockResolvedValue(mockUser);
@@ -80,7 +80,7 @@ describe("User Controller", () => {
       expect(jsonMock).toHaveBeenCalledWith(mockUser);
     });
 
-    it("should return 400 if user not found", async () => {
+    it("Deve retornar 400 se o usuário não for encontrado", async () => {
       req.params = { id: "1" };
       (User.findById as jest.Mock).mockResolvedValue(null);
 
@@ -94,7 +94,7 @@ describe("User Controller", () => {
   });
 
   describe("updateUserController", () => {
-    it("should update user with hashed password", async () => {
+    it("Deve atualizar o usuário com senha criptografada", async () => {
       req.params = { id: "1" };
       req.body = { password: "123" };
       (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
@@ -112,7 +112,7 @@ describe("User Controller", () => {
       expect(jsonMock).toHaveBeenCalledWith(updatedUser);
     });
 
-    it("should update user without password", async () => {
+    it("Deve atualizar o usuário sem alterar a senha", async () => {
       req.params = { id: "1" };
       req.body = { name: "John" };
       const updatedUser = { id: "1", name: "John" };
@@ -128,7 +128,7 @@ describe("User Controller", () => {
       expect(jsonMock).toHaveBeenCalledWith(updatedUser);
     });
 
-    it("should return 404 if user not found", async () => {
+    it("Deve retornar 404 se o usuário não for encontrado", async () => {
       req.params = { id: "1" };
       req.body = { name: "John" };
       (User.findByIdAndUpdate as jest.Mock).mockResolvedValue(null);
@@ -141,10 +141,10 @@ describe("User Controller", () => {
       });
     });
 
-    it("should handle errors gracefully", async () => {
+    it("Deve tratar erros corretamente", async () => {
       req.params = { id: "1" };
       (User.findByIdAndUpdate as jest.Mock).mockRejectedValue(
-        new Error("DB error")
+        new Error("Erro no banco")
       );
 
       await updateUserController(req as Request, res as Response);
@@ -157,7 +157,7 @@ describe("User Controller", () => {
   });
 
   describe("deleteUserController", () => {
-    it("should delete user and answer logs", async () => {
+    it("Deve excluir o usuário e os logs de respostas", async () => {
       req.params = { id: "1" };
       (User.findByIdAndDelete as jest.Mock).mockResolvedValue({});
       (AnswerLog.deleteMany as jest.Mock).mockResolvedValue({});
@@ -170,10 +170,10 @@ describe("User Controller", () => {
       expect(sendMock).toHaveBeenCalled();
     });
 
-    it("should handle errors gracefully", async () => {
+    it("Deve tratar erros corretamente", async () => {
       req.params = { id: "1" };
       (User.findByIdAndDelete as jest.Mock).mockRejectedValue(
-        new Error("DB error")
+        new Error("Erro no banco")
       );
 
       await deleteUserController(req as Request, res as Response);

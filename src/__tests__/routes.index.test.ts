@@ -8,7 +8,7 @@ import {
 } from "../routes";
 
 describe("Rotas index.ts", () => {
-  it("should export all routers", () => {
+  it("Deve exportar todos os routers", () => {
     expect(routerUser).toBeDefined();
     expect(routerLevel).toBeDefined();
     expect(routerSection).toBeDefined();

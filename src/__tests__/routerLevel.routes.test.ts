@@ -22,13 +22,13 @@ jest.mock("../controllers", () => ({
 }));
 
 describe("routerLevel", () => {
-  it("should be an Express router", () => {
+  it("Deve ser um router do Express", () => {
     expect(routerLevel).toBeDefined();
     expect(typeof routerLevel).toBe("function");
     expect(routerLevel.stack).toBeDefined();
   });
 
-  it("should define POST /", () => {
+  it("Deve definir POST /", () => {
     const route = routerLevel.stack.find(
       (r: any) => r.route?.path === "/" && r.route.methods.post
     );
@@ -37,7 +37,7 @@ describe("routerLevel", () => {
     expect(middlewares).toContain(createLevelController);
   });
 
-  it("should define GET /", () => {
+  it("Deve definir GET /", () => {
     const route = routerLevel.stack.find(
       (r: any) => r.route?.path === "/" && r.route.methods.get
     );
@@ -46,7 +46,7 @@ describe("routerLevel", () => {
     expect(middlewares).toContain(getAllLevelController);
   });
 
-  it("should define GET /:id", () => {
+  it("Deve definir GET /:id", () => {
     const route = routerLevel.stack.find(
       (r: any) => r.route?.path === "/:id" && r.route.methods.get
     );
@@ -55,7 +55,7 @@ describe("routerLevel", () => {
     expect(middlewares).toContain(getLevelByIdController);
   });
 
-  it("should define PUT /:id", () => {
+  it("Deve definir PUT /:id", () => {
     const route = routerLevel.stack.find(
       (r: any) => r.route?.path === "/:id" && r.route.methods.put
     );
@@ -64,7 +64,7 @@ describe("routerLevel", () => {
     expect(middlewares).toContain(updateLevelController);
   });
 
-  it("should define DELETE /:id", () => {
+  it("Deve definir DELETE /:id", () => {
     const route = routerLevel.stack.find(
       (r: any) => r.route?.path === "/:id" && r.route.methods.delete
     );

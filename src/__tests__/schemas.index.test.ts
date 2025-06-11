@@ -7,7 +7,7 @@ import {
 } from "../schemas";
 
 describe("Schemas index.ts", () => {
-  it("should export all schemas", () => {
+  it("Deve exportar todos os schemas", () => {
     expect(UserSchema).toBeDefined();
     expect(LevelSchema).toBeDefined();
     expect(SectionSchema).toBeDefined();

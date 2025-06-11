@@ -19,7 +19,7 @@ describe("authMiddleware", () => {
     next = jest.fn();
   });
 
-  it("should respond with 401 if no token is provided", () => {
+  it("Deve responder com 401 se nenhum token for fornecido", () => {
     authMiddleware(req as Request, res as Response, next);
 
     expect(res.status).toHaveBeenCalledWith(401);
@@ -27,7 +27,7 @@ describe("authMiddleware", () => {
     expect(next).not.toHaveBeenCalled();
   });
 
-  it("should call next if token is valid", () => {
+  it("Deve chamar next se o token for válido", () => {
     const mockDecoded = { userId: "123" };
     (jwt.verify as jest.Mock).mockReturnValue(mockDecoded);
     req.headers!.authorization = "Bearer valid_token";
@@ -39,9 +39,9 @@ describe("authMiddleware", () => {
     expect(next).toHaveBeenCalled();
   });
 
-  it("should respond with 401 if token is invalid", () => {
+  it("Deve responder com 401 se o token for inválido", () => {
     (jwt.verify as jest.Mock).mockImplementation(() => {
-      throw new Error("Invalid token");
+      throw new Error("Token inválido");
     });
     req.headers!.authorization = "Bearer invalid_token";
 

@@ -12,7 +12,7 @@ describe("asyncHandler", () => {
     next = jest.fn();
   });
 
-  it("should call the wrapped function with req and res", async () => {
+  it("Deve chamar a função encapsulada com req e res", async () => {
     const mockFn = jest.fn().mockResolvedValue(undefined);
     const handler = asyncHandler(mockFn);
 
@@ -21,8 +21,8 @@ describe("asyncHandler", () => {
     expect(mockFn).toHaveBeenCalledWith(req, res);
   });
 
-  it("should call next with error if the wrapped function throws", async () => {
-    const error = new Error("Test error");
+  it("Deve chamar next com erro se a função encapsulada lançar", async () => {
+    const error = new Error("Erro de teste");
     const mockFn = jest.fn().mockRejectedValue(error);
     const handler = asyncHandler(mockFn);
 
@@ -31,7 +31,7 @@ describe("asyncHandler", () => {
     expect(next).toHaveBeenCalledWith(error);
   });
 
-  it("should not call next if the wrapped function resolves", async () => {
+  it("Não deve chamar next se a função encapsulada resolver", async () => {
     const mockFn = jest.fn().mockResolvedValue(undefined);
     const handler = asyncHandler(mockFn);
 

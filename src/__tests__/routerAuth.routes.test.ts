@@ -13,13 +13,13 @@ jest.mock("../controllers", () => ({
 }));
 
 describe("routerAuth", () => {
-  it("should be an Express router", () => {
+  it("Deve ser um router do Express", () => {
     expect(routerAuth).toBeDefined();
     expect(typeof routerAuth).toBe("function");
     expect(routerAuth.stack).toBeDefined();
   });
 
-  it("should define POST /register", () => {
+  it("Deve definir POST /register", () => {
     const route = routerAuth.stack.find(
       (r: any) => r.route?.path === "/register" && r.route.methods.post
     );
@@ -28,7 +28,7 @@ describe("routerAuth", () => {
     expect(middlewares).toContain(register);
   });
 
-  it("should define POST /login", () => {
+  it("Deve definir POST /login", () => {
     const route = routerAuth.stack.find(
       (r: any) => r.route?.path === "/login" && r.route.methods.post
     );

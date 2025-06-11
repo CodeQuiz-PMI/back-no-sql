@@ -8,7 +8,7 @@ describe("AnswerLog Schema", () => {
     await mongoose.disconnect();
   });
 
-  it("should require required fields", () => {
+  it("Deve exigir os campos obrigatórios", () => {
     const answerLog = new AnswerLog({});
 
     const validationError = answerLog.validateSync();
@@ -20,7 +20,7 @@ describe("AnswerLog Schema", () => {
     expect(validationError?.errors.isCorrect).toBeDefined();
   });
 
-  it("should default pointsEarned to 0", () => {
+  it("Deve definir pointsEarned como 0 por padrão", () => {
     const answerLog = new AnswerLog({
       user: new mongoose.Types.ObjectId(),
       question: new mongoose.Types.ObjectId(),
@@ -33,7 +33,7 @@ describe("AnswerLog Schema", () => {
     expect(answerLog.pointsEarned).toBe(0);
   });
 
-  it("should default answeredAt to current date", () => {
+  it("Deve definir answeredAt como a data atual por padrão", () => {
     const now = Date.now();
     const answerLog = new AnswerLog({
       user: new mongoose.Types.ObjectId(),

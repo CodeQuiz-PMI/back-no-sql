@@ -10,8 +10,8 @@ jest.mock("mongoose", () => {
   };
 });
 
-describe("User model", () => {
-  it("should define the User model with correct name and schema", () => {
+describe("Model de Usuário", () => {
+  it("Deve definir o model User com o nome e schema corretos", () => {
     expect(mongooseModel).toHaveBeenCalledWith("User", UserSchema);
   });
 });

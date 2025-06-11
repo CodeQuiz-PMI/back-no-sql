@@ -41,7 +41,7 @@ describe("Auth Controller", () => {
   });
 
   describe("register", () => {
-    it("should register user successfully", async () => {
+    it("deve registrar o usuário com sucesso", async () => {
       req.body = { name: "John", email: "john@example.com", password: "1234" };
       (User.findOne as jest.Mock).mockResolvedValue(null);
       (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
@@ -69,7 +69,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should return 400 if email already exists", async () => {
+    it("deve retornar 400 se o e-mail já existir", async () => {
       req.body = { email: "john@example.com" };
       (User.findOne as jest.Mock).mockResolvedValue({});
 
@@ -81,7 +81,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should handle error gracefully (instanceof Error)", async () => {
+    it("deve lidar com erro (instanceof Error)", async () => {
       req.body = { email: "john@example.com" };
       const error = new Error("DB error");
       (User.findOne as jest.Mock).mockRejectedValue(error);
@@ -94,9 +94,9 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should handle error gracefully (not instanceof Error)", async () => {
+    it("deve lidar com erro (não instanceof Error)", async () => {
       req.body = { email: "john@example.com" };
-      (User.findOne as jest.Mock).mockRejectedValue("some string error");
+      (User.findOne as jest.Mock).mockRejectedValue("algum erro");
 
       await register(req as Request, res as Response);
 
@@ -106,11 +106,11 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should handle error gracefully (non-Error type from bcrypt.hash)", async () => {
+    it("deve lidar com erro (bcrypt.hash lança um tipo não-Error)", async () => {
       req.body = { name: "John", email: "john@example.com", password: "1234" };
       (User.findOne as jest.Mock).mockResolvedValue(null);
       (bcrypt.hash as jest.Mock).mockImplementation(() => {
-        throw "some string error";
+        throw "algum erro";
       });
 
       await register(req as Request, res as Response);
@@ -121,58 +121,43 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should handle error thrown by bcrypt.hash", async () => {
+    it("deve lidar com erro lançado pelo bcrypt.hash", async () => {
       req.body = { name: "John", email: "john@example.com", password: "1234" };
       (User.findOne as jest.Mock).mockResolvedValue(null);
       (bcrypt.hash as jest.Mock).mockImplementation(() => {
-        throw new Error("bcrypt failed");
+        throw new Error("bcrypt falhou");
       });
 
       await register(req as Request, res as Response);
 
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
-        error: "bcrypt failed",
+        error: "bcrypt falhou",
       });
     });
 
-    it("should handle error thrown by bcrypt.hash", async () => {
-      req.body = { name: "John", email: "john@example.com", password: "1234" };
-      (User.findOne as jest.Mock).mockResolvedValue(null);
-      (bcrypt.hash as jest.Mock).mockImplementation(() => {
-        throw new Error("bcrypt failed");
-      });
-
-      await register(req as Request, res as Response);
-
-      expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({
-        error: "bcrypt failed",
-      });
-    });
-
-    it("should handle error thrown by User.create", async () => {
+    it("deve lidar com erro lançado pelo User.create", async () => {
       req.body = { name: "John", email: "john@example.com", password: "1234" };
       (User.findOne as jest.Mock).mockResolvedValue(null);
       (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
       (User.create as jest.Mock).mockImplementation(() => {
-        throw new Error("create failed");
+        throw new Error("create falhou");
       });
 
       await register(req as Request, res as Response);
 
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
-        error: "create failed",
+        error: "create falhou",
       });
     });
 
-    it("should handle non-Error thrown inside register (User.create)", async () => {
+    it("deve lidar com erro não-Error lançado dentro de register (User.create)", async () => {
       req.body = { name: "John", email: "john@example.com", password: "1234" };
       (User.findOne as jest.Mock).mockResolvedValue(null);
       (bcrypt.hash as jest.Mock).mockResolvedValue("hashedPassword");
       (User.create as jest.Mock).mockImplementation(() => {
-        throw "some string error";
+        throw "algum erro";
       });
 
       await register(req as Request, res as Response);
@@ -183,7 +168,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should not call bcrypt.hash or User.create if user already exists", async () => {
+    it("não deve chamar bcrypt.hash ou User.create se o usuário já existir", async () => {
       req.body = { email: "john@example.com" };
       (User.findOne as jest.Mock).mockResolvedValue({});
 

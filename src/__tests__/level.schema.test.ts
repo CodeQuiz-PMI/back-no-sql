@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
 import { LevelSchema } from "../schemas/level/level.schema";
 
-describe("Level Schema", () => {
+describe("Schema de Nível", () => {
   const Level = mongoose.model("Level", LevelSchema);
 
   afterAll(async () => {
     await mongoose.disconnect();
   });
 
-  it("should define required fields", async () => {
+  it("Deve definir os campos obrigatórios", async () => {
     const level = new Level({});
 
     const validationError = level.validateSync();
@@ -17,12 +17,12 @@ describe("Level Schema", () => {
     expect(validationError?.errors.difficulty).toBeDefined();
   });
 
-  it("should default createdAt field to current date", async () => {
+  it("Deve definir o campo createdAt como a data atual", async () => {
     const now = Date.now();
     const level = new Level({
-      title: "Level 1",
-      description: "This is level 1",
-      difficulty: "easy",
+      title: "Nível 1",
+      description: "Este é o nível 1",
+      difficulty: "fácil",
     });
 
     expect(level.createdAt).toBeDefined();

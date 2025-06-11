@@ -10,8 +10,8 @@ jest.mock("mongoose", () => {
   };
 });
 
-describe("Section model", () => {
-  it("should define the Section model with correct name and schema", () => {
+describe("Model de Seção", () => {
+  it("Deve definir o model Section com o nome e schema corretos", () => {
     expect(mongooseModel).toHaveBeenCalledWith("Section", SectionSchema);
   });
 });

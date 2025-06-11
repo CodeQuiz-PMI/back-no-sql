@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import routerQuestion from "../routes/question/question.routes";
 import {
   createQuestionController,
@@ -21,63 +22,53 @@ jest.mock("../controllers", () => ({
 }));
 
 describe("routerQuestion", () => {
-  it("should be an Express router", () => {
+  it("Deve ser um router do Express", () => {
     expect(routerQuestion).toBeDefined();
     expect(typeof routerQuestion).toBe("function");
     expect(routerQuestion.stack).toBeDefined();
   });
 
-  it("should define POST /", () => {
+  it("Deve definir POST /", () => {
     const route = routerQuestion.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/" && r.route.methods.post
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(createQuestionController);
   });
 
-  it("should define GET /", () => {
+  it("Deve definir GET /", () => {
     const route = routerQuestion.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/" && r.route.methods.get
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(getAllQuestionController);
   });
 
-  it("should define GET /:id", () => {
+  it("Deve definir GET /:id", () => {
     const route = routerQuestion.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/:id" && r.route.methods.get
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(getQuestionByIdController);
   });
 
-  it("should define PUT /:id", () => {
+  it("Deve definir PUT /:id", () => {
     const route = routerQuestion.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/:id" && r.route.methods.put
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(updateQuestionController);
   });
 
-  it("should define DELETE /:id", () => {
+  it("Deve definir DELETE /:id", () => {
     const route = routerQuestion.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/:id" && r.route.methods.delete
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(deleteQuestionController);
   });

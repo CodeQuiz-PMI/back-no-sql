@@ -2,7 +2,6 @@ import mongoose, { Model } from "mongoose";
 import { IUser } from "../interfaces";
 import { UserSchema } from "../schemas";
 
-// Cria um modelo de teste usando o schema
 const User: Model<IUser> = mongoose.model<IUser>("UserTest", UserSchema);
 
 describe("UserSchema", () => {
@@ -10,7 +9,7 @@ describe("UserSchema", () => {
     await mongoose.disconnect();
   });
 
-  it("should require name, email, and password fields", async () => {
+  it("Deve exigir os campos name, email e password", async () => {
     const user = new User({}); // sem dados obrigatórios
     const validationError = user.validateSync();
 
@@ -19,7 +18,7 @@ describe("UserSchema", () => {
     expect(validationError?.errors.password).toBeDefined();
   });
 
-  it("should allow optional fields to be undefined", async () => {
+  it("Deve permitir que campos opcionais fiquem indefinidos", async () => {
     const user = new User({
       name: "Test User",
       email: "test@example.com",
@@ -30,7 +29,7 @@ describe("UserSchema", () => {
     expect(validationError).toBeUndefined();
   });
 
-  it("should set createdAt field automatically", async () => {
+  it("Deve definir automaticamente o campo createdAt", async () => {
     const user = new User({
       name: "Test User",
       email: "test@example.com",

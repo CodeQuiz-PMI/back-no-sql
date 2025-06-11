@@ -18,7 +18,7 @@ jest.mock("../models", () => ({
   },
 }));
 
-describe("Question Controller", () => {
+describe("Controlador de Questões", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let statusMock: jest.Mock;
@@ -46,8 +46,8 @@ describe("Question Controller", () => {
   });
 
   describe("createQuestionController", () => {
-    it("should create a question and return 201", async () => {
-      const mockQuestion = { id: "1", title: "Sample Question" };
+    it("Deve criar uma questão e retornar 201", async () => {
+      const mockQuestion = { id: "1", title: "Questão de Exemplo" };
       (Question.create as jest.Mock).mockResolvedValue(mockQuestion);
 
       await createQuestionController(req as Request, res as Response);
@@ -57,29 +57,31 @@ describe("Question Controller", () => {
       expect(jsonMock).toHaveBeenCalledWith(mockQuestion);
     });
 
-    it("should handle errors (instanceof Error)", async () => {
-      (Question.create as jest.Mock).mockRejectedValue(new Error("DB error"));
+    it("Deve tratar erros (instanceof Error)", async () => {
+      (Question.create as jest.Mock).mockRejectedValue(
+        new Error("Erro no banco")
+      );
 
       await createQuestionController(req as Request, res as Response);
 
       expect(console.error).toHaveBeenCalledWith(expect.any(Error));
       expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({ error: "DB error" });
+      expect(jsonMock).toHaveBeenCalledWith({ error: "Erro no banco" });
     });
 
-    it("should handle non-Error thrown values", async () => {
-      (Question.create as jest.Mock).mockRejectedValue("unexpected error");
+    it("Deve tratar valores lançados que não são Error", async () => {
+      (Question.create as jest.Mock).mockRejectedValue("erro inesperado");
 
       await createQuestionController(req as Request, res as Response);
 
-      expect(console.error).toHaveBeenCalledWith("unexpected error");
+      expect(console.error).toHaveBeenCalledWith("erro inesperado");
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({ error: "Erro desconhecido." });
     });
   });
 
   describe("getAllQuestionController", () => {
-    it("should return all questions with section populated", async () => {
+    it("Deve retornar todas as questões com seção populada", async () => {
       const mockQuestions = [{ id: "1" }];
       const populateMock = jest.fn().mockResolvedValue(mockQuestions);
       (Question.find as jest.Mock).mockReturnValue({ populate: populateMock });
@@ -94,7 +96,7 @@ describe("Question Controller", () => {
   });
 
   describe("getQuestionByIdController", () => {
-    it("should return question if found", async () => {
+    it("Deve retornar a questão se encontrada", async () => {
       const mockQuestion = { id: "1" };
       const populateMock = jest.fn().mockResolvedValue(mockQuestion);
       (Question.findById as jest.Mock).mockReturnValue({
@@ -110,7 +112,7 @@ describe("Question Controller", () => {
       expect(jsonMock).toHaveBeenCalledWith(mockQuestion);
     });
 
-    it("should return 404 if question not found", async () => {
+    it("Deve retornar 404 se a questão não for encontrada", async () => {
       const populateMock = jest.fn().mockResolvedValue(null);
       (Question.findById as jest.Mock).mockReturnValue({
         populate: populateMock,
@@ -127,20 +129,20 @@ describe("Question Controller", () => {
   });
 
   describe("updateQuestionController", () => {
-    it("should update question and return 201", async () => {
-      const updatedQuestion = { id: "1", title: "Updated" };
+    it("Deve atualizar a questão e retornar 201", async () => {
+      const updatedQuestion = { id: "1", title: "Atualizada" };
       (Question.findByIdAndUpdate as jest.Mock).mockResolvedValue(
         updatedQuestion
       );
 
       req.params = { id: "1" };
-      req.body = { title: "Updated" };
+      req.body = { title: "Atualizada" };
 
       await updateQuestionController(req as Request, res as Response);
 
       expect(Question.findByIdAndUpdate).toHaveBeenCalledWith(
         "1",
-        { title: "Updated" },
+        { title: "Atualizada" },
         { new: true }
       );
       expect(statusMock).toHaveBeenCalledWith(201);
@@ -149,7 +151,7 @@ describe("Question Controller", () => {
   });
 
   describe("deleteQuestionController", () => {
-    it("should delete question and return 204", async () => {
+    it("Deve excluir a questão e retornar 204", async () => {
       (Question.findByIdAndDelete as jest.Mock).mockResolvedValue({});
 
       req.params = { id: "1" };

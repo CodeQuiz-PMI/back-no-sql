@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import routerSection from "../routes/section/section.routes";
 import {
   createSectionController,
@@ -21,63 +22,53 @@ jest.mock("../controllers", () => ({
 }));
 
 describe("routerSection", () => {
-  it("should be an Express router", () => {
+  it("Deve ser um router do Express", () => {
     expect(routerSection).toBeDefined();
     expect(typeof routerSection).toBe("function");
     expect(routerSection.stack).toBeDefined();
   });
 
-  it("should define POST /", () => {
+  it("Deve definir POST /", () => {
     const route = routerSection.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/" && r.route.methods.post
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(createSectionController);
   });
 
-  it("should define GET /", () => {
+  it("Deve definir GET /", () => {
     const route = routerSection.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/" && r.route.methods.get
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(getAllSectionController);
   });
 
-  it("should define GET /:id", () => {
+  it("Deve definir GET /:id", () => {
     const route = routerSection.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/:id" && r.route.methods.get
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(getSectionByIdController);
   });
 
-  it("should define PUT /:id", () => {
+  it("Deve definir PUT /:id", () => {
     const route = routerSection.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/:id" && r.route.methods.put
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(updateSectionController);
   });
 
-  it("should define DELETE /:id", () => {
+  it("Deve definir DELETE /:id", () => {
     const route = routerSection.stack.find(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (r: any) => r.route?.path === "/:id" && r.route.methods.delete
     );
     expect(route).toBeDefined();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const middlewares = route?.route?.stack.map((s: any) => s.handle);
     expect(middlewares).toContain(deleteSectionController);
   });

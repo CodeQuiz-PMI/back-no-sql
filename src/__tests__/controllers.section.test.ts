@@ -18,7 +18,7 @@ jest.mock("../models", () => ({
   },
 }));
 
-describe("Section Controller", () => {
+describe("Controlador de Seções", () => {
   let req: Partial<Request>;
   let res: Partial<Response>;
   let statusMock: jest.Mock;
@@ -46,8 +46,8 @@ describe("Section Controller", () => {
   });
 
   describe("createSectionController", () => {
-    it("should create a section and return 201", async () => {
-      const mockSection = { id: "1", title: "Test Section" };
+    it("Deve criar uma seção e retornar 201", async () => {
+      const mockSection = { id: "1", title: "Seção de Teste" };
       (Section.create as jest.Mock).mockResolvedValue(mockSection);
 
       await createSectionController(req as Request, res as Response);
@@ -57,29 +57,31 @@ describe("Section Controller", () => {
       expect(jsonMock).toHaveBeenCalledWith(mockSection);
     });
 
-    it("should handle errors (instanceof Error)", async () => {
-      (Section.create as jest.Mock).mockRejectedValue(new Error("DB error"));
+    it("Deve tratar erros (instanceof Error)", async () => {
+      (Section.create as jest.Mock).mockRejectedValue(
+        new Error("Erro no banco")
+      );
 
       await createSectionController(req as Request, res as Response);
 
       expect(console.error).toHaveBeenCalledWith(expect.any(Error));
       expect(statusMock).toHaveBeenCalledWith(400);
-      expect(jsonMock).toHaveBeenCalledWith({ error: "DB error" });
+      expect(jsonMock).toHaveBeenCalledWith({ error: "Erro no banco" });
     });
 
-    it("should handle non-Error thrown values", async () => {
-      (Section.create as jest.Mock).mockRejectedValue("unexpected error");
+    it("Deve tratar valores lançados que não são Error", async () => {
+      (Section.create as jest.Mock).mockRejectedValue("erro inesperado");
 
       await createSectionController(req as Request, res as Response);
 
-      expect(console.error).toHaveBeenCalledWith("unexpected error");
+      expect(console.error).toHaveBeenCalledWith("erro inesperado");
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({ error: "Erro desconhecido." });
     });
   });
 
   describe("getAllSectionController", () => {
-    it("should return all sections with level populated", async () => {
+    it("Deve retornar todas as seções com o nível populado", async () => {
       const mockSections = [{ id: "1" }];
       const populateMock = jest.fn().mockResolvedValue(mockSections);
       (Section.find as jest.Mock).mockReturnValue({ populate: populateMock });
@@ -94,7 +96,7 @@ describe("Section Controller", () => {
   });
 
   describe("getSectionByIdController", () => {
-    it("should return section if found", async () => {
+    it("Deve retornar a seção se encontrada", async () => {
       const mockSection = { id: "1" };
       const populateMock = jest.fn().mockResolvedValue(mockSection);
       (Section.findById as jest.Mock).mockReturnValue({
@@ -110,7 +112,7 @@ describe("Section Controller", () => {
       expect(jsonMock).toHaveBeenCalledWith(mockSection);
     });
 
-    it("should return 404 if section not found", async () => {
+    it("Deve retornar 404 se a seção não for encontrada", async () => {
       const populateMock = jest.fn().mockResolvedValue(null);
       (Section.findById as jest.Mock).mockReturnValue({
         populate: populateMock,
@@ -125,20 +127,20 @@ describe("Section Controller", () => {
   });
 
   describe("updateSectionController", () => {
-    it("should update section and return 204", async () => {
-      const updatedSection = { id: "1", title: "Updated" };
+    it("Deve atualizar a seção e retornar 204", async () => {
+      const updatedSection = { id: "1", title: "Atualizada" };
       (Section.findByIdAndUpdate as jest.Mock).mockResolvedValue(
         updatedSection
       );
 
       req.params = { id: "1" };
-      req.body = { title: "Updated" };
+      req.body = { title: "Atualizada" };
 
       await updateSectionController(req as Request, res as Response);
 
       expect(Section.findByIdAndUpdate).toHaveBeenCalledWith(
         "1",
-        { title: "Updated" },
+        { title: "Atualizada" },
         { new: true }
       );
       expect(statusMock).toHaveBeenCalledWith(204);
@@ -147,7 +149,7 @@ describe("Section Controller", () => {
   });
 
   describe("deleteSectionController", () => {
-    it("should delete section and return 204", async () => {
+    it("Deve excluir a seção e retornar 204", async () => {
       (Section.findByIdAndDelete as jest.Mock).mockResolvedValue({});
 
       req.params = { id: "1" };

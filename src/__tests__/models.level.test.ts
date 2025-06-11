@@ -10,8 +10,8 @@ jest.mock("mongoose", () => {
   };
 });
 
-describe("Level model", () => {
-  it("should define the Level model with correct name and schema", () => {
+describe("Model de Nível", () => {
+  it("Deve definir o model Level com o nome e schema corretos", () => {
     expect(mongooseModel).toHaveBeenCalledWith("Level", LevelSchema);
   });
 });
