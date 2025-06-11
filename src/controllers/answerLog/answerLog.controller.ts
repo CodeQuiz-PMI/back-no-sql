@@ -1,5 +1,5 @@
-import { QuestionWithPopulatedSection } from "../../interfaces";
-import { AnswerLog, Level, Question, User } from "../../models";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { AnswerLog, Level, Question, Section, User } from "../../models";
 import { Request, Response } from "express";
 
 export const submitAnswerController = async (
@@ -9,43 +9,53 @@ export const submitAnswerController = async (
   try {
     const { userId, questionId, userAnswer } = req.body;
 
-    const question = await Question.findById(questionId).populate("section");
-
-    if (!question || !question.section) {
-      res.status(404).json({ error: "Questão ou seção não encontrada" });
+    // Busca a questão pelo ID
+    const question = await Question.findById(questionId).exec();
+    if (!question) {
+      res.status(404).json({ error: "Questão não encontrada" });
       return;
     }
 
-    const questionWithSection =
-      question as unknown as QuestionWithPopulatedSection;
+    // Busca a seção da questão
+    const section = await Section.findById(question.section).exec();
+    if (!section) {
+      res.status(404).json({ error: "Seção não encontrada" });
+      return;
+    }
 
-    const level = await Level.findById(questionWithSection.section.level);
-
+    // Busca o nível da seção
+    const level = await Level.findById(section.level).exec();
     if (!level) {
       res.status(404).json({ error: "Nível não encontrado" });
       return;
     }
 
+    // Verifica se a resposta está correta
     const isCorrect = userAnswer.trim() === question.correctResponse.trim();
     const pointsEarned = isCorrect ? question.points : 0;
 
+    // Cria o log de resposta
     await AnswerLog.create({
       user: userId,
       question: question._id,
-      section: question.section._id,
+      section: section._id,
       level: level._id,
       userAnswer,
       isCorrect,
       pointsEarned,
     });
 
-    await User.findByIdAndUpdate(userId, {
-      $inc: { totalPoints: pointsEarned },
-    });
+    // Atualiza os pontos do usuário
+    await User.findByIdAndUpdate(
+      userId,
+      { $inc: { totalPoints: pointsEarned } },
+      { new: true }
+    );
 
     res.status(200).json({ correct: isCorrect, pointsEarned });
   } catch (error) {
     console.error("Erro ao salvar resposta:", error);
+    res.status(500).json({ error: "Erro interno ao salvar resposta" });
   }
 };
 
@@ -61,7 +71,6 @@ export const getAllAnswerLogsController = async (
       .populate("level", "title");
 
     res.status(200).json(logs);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     res.status(500).json({ error: "Erro ao buscar logs de respostas" });
   }
@@ -72,7 +81,6 @@ export const getAnswerLogsByUser = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const logs = await AnswerLog.find({ user: userId });
     res.status(200).json(logs);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     res.status(500).json({ error: "Erro ao buscar logs por usuário" });
   }
@@ -104,7 +112,6 @@ export const deleteAllAnswerLogsByUser = async (
     res
       .status(200)
       .json({ message: "Logs excluídos e progresso resetado com sucesso." });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     res
       .status(500)

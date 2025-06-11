@@ -182,6 +182,16 @@ describe("Auth Controller", () => {
         error: "Erro desconhecido.",
       });
     });
+
+    it("should not call bcrypt.hash or User.create if user already exists", async () => {
+      req.body = { email: "john@example.com" };
+      (User.findOne as jest.Mock).mockResolvedValue({});
+
+      await register(req as Request, res as Response);
+
+      expect(bcrypt.hash).not.toHaveBeenCalled();
+      expect(User.create).not.toHaveBeenCalled();
+    });
   });
 
   describe("login", () => {
@@ -337,6 +347,33 @@ describe("Auth Controller", () => {
       expect(statusMock).toHaveBeenCalledWith(400);
       expect(jsonMock).toHaveBeenCalledWith({
         error: "JWT error",
+      });
+    });
+
+    it("should default to 'Fase 1' if currentLevel is not defined", async () => {
+      req.body = { email: "john@example.com", password: "1234" };
+      const mockUser = {
+        _id: "1",
+        email: "john@example.com",
+        password: "hashedPassword",
+        name: "John",
+        currentLevel: undefined,
+      };
+      (User.findOne as jest.Mock).mockResolvedValue(mockUser);
+      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
+      (jwt.sign as jest.Mock).mockReturnValue("mockToken");
+
+      await login(req as Request, res as Response);
+
+      expect(statusMock).toHaveBeenCalledWith(201);
+      expect(jsonMock).toHaveBeenCalledWith({
+        token: "mockToken",
+        user: {
+          id: "1",
+          name: "John",
+          email: "john@example.com",
+          currentLevel: "Fase 1",
+        },
       });
     });
   });
