@@ -214,7 +214,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should return 404 if user not found", async () => {
+    it("Deve retornar 404 se o usuário não for encontrado", async () => {
       req.body = { email: "john@example.com", password: "1234" };
       (User.findOne as jest.Mock).mockResolvedValue(null);
 
@@ -226,7 +226,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should return 401 if password is incorrect", async () => {
+    it("Deve retornar 401 se a senha estiver incorreta", async () => {
       req.body = { email: "john@example.com", password: "wrongpass" };
       const mockUser = {
         _id: "1",
@@ -244,7 +244,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should handle error gracefully in login (instanceof Error)", async () => {
+    it("Deve lidar com erros graciosamente no login (instanceof Error)", async () => {
       req.body = { email: "john@example.com", password: "1234" };
       const error = new Error("DB error");
       (User.findOne as jest.Mock).mockRejectedValue(error);
@@ -257,7 +257,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should handle error gracefully in login (not instanceof Error)", async () => {
+    it("Deve lidar com erros graciosamente no login (não no erro instanceof)", async () => {
       req.body = { email: "john@example.com", password: "1234" };
       (User.findOne as jest.Mock).mockRejectedValue("some string error");
 
@@ -269,7 +269,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should handle error gracefully in login (non-Error type from jwt.sign)", async () => {
+    it("Deve lidar com erros com elegância no login (non-Error type from jwt.sign)", async () => {
       req.body = { email: "john@example.com", password: "1234" };
       const mockUser = {
         _id: "1",
@@ -292,7 +292,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should handle error gracefully in login (non-Error type from bcrypt.compare)", async () => {
+    it("Deve lidar com erros com elegância no login (non-Error type from bcrypt.compare)", async () => {
       req.body = { email: "john@example.com", password: "1234" };
       const mockUser = {
         _id: "1",
@@ -312,7 +312,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should handle error gracefully in login (instanceof Error from jwt.sign)", async () => {
+    it("Deve lidar com erros com elegância no login (instanceof Error from jwt.sign)", async () => {
       req.body = { email: "john@example.com", password: "1234" };
       const mockUser = {
         _id: "1",
@@ -335,7 +335,7 @@ describe("Auth Controller", () => {
       });
     });
 
-    it("should default to 'Fase 1' if currentLevel is not defined", async () => {
+    it("Deve assumir como padrão 'Fase 1' se currentLevel não estiver definido", async () => {
       req.body = { email: "john@example.com", password: "1234" };
       const mockUser = {
         _id: "1",
