@@ -13,7 +13,7 @@ A **CodeQuiz API** é um sistema backend desenvolvido com **Node.js**, **Express
 | POST   | `/register` | Cria um novo usuário                       |
 | POST   | `/login`    | Autentica o usuário e retorna um token JWT |
 
-#### Exemplo de payload:
+#### Exemplo de payload
 
 ```json
 POST /register
@@ -22,7 +22,7 @@ POST /register
   "email": "joao@email.com",
   "password": "123456"
 }
-````
+```
 
 ```json
 POST /login
@@ -57,7 +57,7 @@ POST /login
 | PUT    | `/levels/:id` | Atualiza um nível           |
 | DELETE | `/levels/:id` | Deleta um nível             |
 
-#### Exemplo de payload:
+#### Exemplo de payload
 
 ```json
 POST /levels
@@ -80,7 +80,7 @@ POST /levels
 | PUT    | `/sections/:id` | Atualiza uma seção           |
 | DELETE | `/sections/:id` | Deleta uma seção             |
 
-#### Exemplo de payload:
+#### Exemplo de payload
 
 ```json
 POST /sections
@@ -103,7 +103,7 @@ POST /sections
 | PUT    | `/questions/:id` | Atualiza uma pergunta           |
 | DELETE | `/questions/:id` | Deleta uma pergunta             |
 
-#### Exemplo de payload:
+#### Exemplo de payload
 
 ````json
 POST /questions
@@ -132,7 +132,7 @@ POST /questions
 | GET    | `/logs/:userId`        | Lista todos os registros de um usuário |
 | DELETE | `/logs/:userId/delete` | Deleta todos os logs de um usuário     |
 
-#### Exemplo de payload:
+#### Exemplo de payload
 
 ```json
 POST /logs/submit
@@ -227,6 +227,20 @@ Authorization: Bearer seu_token_jwt
 
 ---
 
+## 📊 Documentação com Swagger
+
+A documentação completa e interativa da API está disponível via Swagger.
+
+### 📍 Acesse
+
+```
+http://localhost:3000/api-docs
+```
+
+Essa interface permite visualizar todos os endpoints, enviar requisições de teste e explorar os contratos da API de forma dinâmica e intuitiva.
+
+---
+
 ## 🚀 Testes
 
 Para rodar os testes (usando Jest):
@@ -242,6 +256,7 @@ npm run test
 ```
 src/
 ├── controllers/
+├── docs/
 ├── interfaces/
 ├── middlewares/
 ├── models/
@@ -258,4 +273,4 @@ src/
 
 Desenvolvido por Diego André, Maria Julia, Magnolia, Leonardo Giora e Aline — Projeto acadêmico e educacional.
 
-```
+---
