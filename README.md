@@ -234,7 +234,7 @@ A documentação completa e interativa da API está disponível via Swagger.
 ### 📍 Acesse
 
 ```
-http://localhost:3000/api-docs
+http://localhost:4000/api-docs
 ```
 
 Essa interface permite visualizar todos os endpoints, enviar requisições de teste e explorar os contratos da API de forma dinâmica e intuitiva.
