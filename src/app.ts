@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import { swaggerSpec } from "./docs/swagger";
 
 import {
   routerAuth,
@@ -22,5 +24,7 @@ app.use("/api/sections", routerSection);
 app.use("/api/questions", routerQuestion);
 
 app.use("/api/answerlogs", routerLog);
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 export default app;
