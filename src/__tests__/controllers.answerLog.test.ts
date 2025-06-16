@@ -5,6 +5,7 @@ import {
   getAllAnswerLogsController,
   getAnswerLogsByUser,
   deleteAllAnswerLogsByUser,
+  updateAnswerLogController,
 } from "../controllers";
 import { Question, Section, Level, AnswerLog, User } from "../models";
 import { Types } from "mongoose";
@@ -426,6 +427,195 @@ describe("Answer Controllers", () => {
       expect(res.json).toHaveBeenCalledWith({
         error: "Erro ao excluir logs e resetar progresso do usuário.",
       });
+    });
+  });
+
+  describe("updateAnswerLogController", () => {
+    it("Deve atualizar a resposta e recalcular os campos relacionados", async () => {
+      const logId = new Types.ObjectId();
+      const questionId = new Types.ObjectId();
+
+      const questionMock = {
+        _id: questionId,
+        correctResponse: "Nova Resposta",
+        points: 15,
+      };
+
+      interface AnswerLogMockType {
+        _id: Types.ObjectId;
+        question: Types.ObjectId;
+        user: Types.ObjectId;
+        userAnswer: string;
+        isCorrect: boolean;
+        pointsEarned: number;
+        save: () => Promise<AnswerLogMockType>;
+      }
+
+      const saveMock = jest
+        .fn()
+        .mockImplementation(function (this: AnswerLogMockType) {
+          return Promise.resolve(this);
+        });
+
+      const answerLogMock: AnswerLogMockType = {
+        _id: logId,
+        question: questionId,
+        user: new Types.ObjectId(),
+        userAnswer: "Antiga Resposta",
+        isCorrect: false,
+        pointsEarned: 0,
+        save: saveMock,
+      };
+
+      jest.spyOn(AnswerLog, "findById").mockReturnValue({
+        exec: jest.fn().mockResolvedValue(answerLogMock),
+      } as any);
+
+      jest.spyOn(Question, "findById").mockReturnValue({
+        exec: jest.fn().mockResolvedValue(questionMock),
+      } as any);
+
+      const req = mockRequest(
+        { userAnswer: "Nova Resposta" },
+        { logId: logId.toString() }
+      );
+      const res = mockResponse();
+      await updateAnswerLogController(req, res);
+      expect(answerLogMock.userAnswer).toBe("Nova Resposta");
+      expect(answerLogMock.isCorrect).toBe(true);
+      expect(answerLogMock.pointsEarned).toBe(15);
+      expect(answerLogMock.save).toHaveBeenCalled?.();
+      expect(saveMock).toHaveBeenCalled();
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Log de resposta atualizado com sucesso",
+        updatedLog: answerLogMock,
+      });
+    });
+
+    it("Deve retornar erro se a questão não for encontrada", async () => {
+      const logId = new Types.ObjectId();
+      const questionId = new Types.ObjectId();
+
+      const answerLogMock = {
+        _id: logId,
+        question: questionId,
+        user: new Types.ObjectId(),
+        userAnswer: "resposta",
+        isCorrect: false,
+        pointsEarned: 0,
+        save: jest.fn(),
+      };
+
+      jest.spyOn(AnswerLog, "findById").mockReturnValue({
+        exec: jest.fn().mockResolvedValue(answerLogMock),
+      } as any);
+
+      jest.spyOn(Question, "findById").mockReturnValue({
+        exec: jest.fn().mockResolvedValue(null),
+      } as any);
+
+      const req = mockRequest(
+        { userAnswer: "teste" },
+        { logId: logId.toString() }
+      );
+      const res = mockResponse();
+
+      await updateAnswerLogController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Questão não encontrada",
+      });
+    });
+
+    it("Deve retornar erro se log não for encontrado", async () => {
+      jest.spyOn(AnswerLog, "findById").mockReturnValue({
+        exec: jest.fn().mockResolvedValue(null),
+      } as any);
+
+      const req = mockRequest({ userAnswer: "teste" }, { logId: "invalidId" });
+      const res = mockResponse();
+
+      await updateAnswerLogController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Log de resposta não encontrado",
+      });
+    });
+
+    it("Deve retornar erro interno", async () => {
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+
+      jest.spyOn(AnswerLog, "findById").mockReturnValue({
+        exec: jest.fn().mockRejectedValue(new Error("Erro inesperado")),
+      } as any);
+
+      const req = mockRequest({ userAnswer: "teste" }, { logId: "someId" });
+      const res = mockResponse();
+
+      await updateAnswerLogController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Erro interno ao atualizar resposta",
+      });
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Erro ao atualizar log de resposta:",
+        expect.any(Error)
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it("Deve retornar erro 500 se falhar ao buscar a questão", async () => {
+      const logId = new Types.ObjectId();
+      const questionId = new Types.ObjectId();
+
+      const answerLogMock = {
+        _id: logId,
+        question: questionId,
+        user: new Types.ObjectId(),
+        userAnswer: "resposta",
+        isCorrect: false,
+        pointsEarned: 0,
+        save: jest.fn(),
+      };
+
+      jest.spyOn(AnswerLog, "findById").mockReturnValue({
+        exec: jest.fn().mockResolvedValue(answerLogMock),
+      } as any);
+
+      jest.spyOn(Question, "findById").mockReturnValue({
+        exec: jest.fn().mockRejectedValue(new Error("Erro ao buscar questão")),
+      } as any);
+
+      const consoleSpy = jest
+        .spyOn(console, "error")
+        .mockImplementation(() => {});
+      const req = mockRequest(
+        { userAnswer: "qualquer coisa" },
+        { logId: logId.toString() }
+      );
+      const res = mockResponse();
+
+      await updateAnswerLogController(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        error: "Erro interno ao atualizar resposta",
+      });
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        "Erro ao atualizar log de resposta:",
+        expect.any(Error)
+      );
+
+      consoleSpy.mockRestore();
     });
   });
 });

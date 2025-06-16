@@ -50,6 +50,10 @@ export const login = async (req: Request, res: Response): Promise<unknown> => {
         name: user.name,
         email: user.email,
         currentLevel: user.currentLevel || "Fase 1",
+        currentSection: user.currentSection,
+        currentQuestion: user.currentQuestion,
+        trophies: user.trophies,
+        totalPoints: user.totalPoints,
       },
     });
   } catch (err: unknown) {

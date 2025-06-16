@@ -36,6 +36,7 @@ import {
   getAllAnswerLogsController,
   getAnswerLogsByUser,
   submitAnswerController,
+  updateAnswerLogController,
 } from "./answerLog/answerLog.controller";
 
 export {
@@ -63,5 +64,6 @@ export {
   submitAnswerController,
   getAllAnswerLogsController,
   getAnswerLogsByUser,
+  updateAnswerLogController,
   deleteAllAnswerLogsByUser,
 };

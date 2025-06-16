@@ -9,32 +9,27 @@ export const submitAnswerController = async (
   try {
     const { userId, questionId, userAnswer } = req.body;
 
-    // Busca a questão pelo ID
     const question = await Question.findById(questionId).exec();
     if (!question) {
       res.status(404).json({ error: "Questão não encontrada" });
       return;
     }
 
-    // Busca a seção da questão
     const section = await Section.findById(question.section).exec();
     if (!section) {
       res.status(404).json({ error: "Seção não encontrada" });
       return;
     }
 
-    // Busca o nível da seção
     const level = await Level.findById(section.level).exec();
     if (!level) {
       res.status(404).json({ error: "Nível não encontrado" });
       return;
     }
 
-    // Verifica se a resposta está correta
     const isCorrect = userAnswer.trim() === question.correctResponse.trim();
     const pointsEarned = isCorrect ? question.points : 0;
 
-    // Cria o log de resposta
     await AnswerLog.create({
       user: userId,
       question: question._id,
@@ -45,7 +40,6 @@ export const submitAnswerController = async (
       pointsEarned,
     });
 
-    // Atualiza os pontos do usuário
     await User.findByIdAndUpdate(
       userId,
       { $inc: { totalPoints: pointsEarned } },
@@ -83,6 +77,48 @@ export const getAnswerLogsByUser = async (req: Request, res: Response) => {
     res.status(200).json(logs);
   } catch (err) {
     res.status(500).json({ error: "Erro ao buscar logs por usuário" });
+  }
+};
+
+export const updateAnswerLogController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { logId } = req.params;
+    const { userAnswer } = req.body;
+
+    const existingLog = await AnswerLog.findById(logId).exec();
+    if (!existingLog) {
+      return res.status(404).json({ error: "Log de resposta não encontrado" });
+    }
+
+    const question = await Question.findById(existingLog.question).exec();
+    if (!question) {
+      return res.status(404).json({ error: "Questão não encontrada" });
+    }
+
+    const oldPoints = existingLog.pointsEarned;
+    const isCorrect = userAnswer.trim() === question.correctResponse.trim();
+    const newPoints = isCorrect ? question.points : 0;
+
+    existingLog.userAnswer = userAnswer;
+    existingLog.isCorrect = isCorrect;
+    existingLog.pointsEarned = newPoints;
+    await existingLog.save();
+
+    const pointsDifference = newPoints - oldPoints;
+    await User.findByIdAndUpdate(existingLog.user, {
+      $inc: { totalPoints: pointsDifference },
+    });
+
+    res.status(200).json({
+      message: "Log de resposta atualizado com sucesso",
+      updatedLog: existingLog,
+    });
+  } catch (error) {
+    console.error("Erro ao atualizar log de resposta:", error);
+    res.status(500).json({ error: "Erro interno ao atualizar resposta" });
   }
 };
 
