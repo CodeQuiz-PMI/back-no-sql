@@ -9,6 +9,9 @@ export const UserSchema = new Schema<IUser>({
   currentSection: { type: String, required: false },
   currentQuestion: { type: String, required: false },
   trophies: { type: Number, required: false },
+  lifes: { type: Number },
+  hints: { type: Number },
+  coins: { type: Number, default: 0 },
   totalPoints: { type: Number, required: false },
   createdAt: { type: Date, default: Date.now },
 });

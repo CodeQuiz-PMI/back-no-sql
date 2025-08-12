@@ -29,6 +29,7 @@ export const submitAnswerController = async (
 
     const isCorrect = userAnswer.trim() === question.correctResponse.trim();
     const pointsEarned = isCorrect ? question.points : 0;
+    const coinsEarned = isCorrect ? Number(question.coinsValues) : 0;
 
     await AnswerLog.create({
       user: userId,
@@ -42,7 +43,12 @@ export const submitAnswerController = async (
 
     await User.findByIdAndUpdate(
       userId,
-      { $inc: { totalPoints: pointsEarned } },
+      {
+        $inc: {
+          totalPoints: pointsEarned,
+          coins: coinsEarned,
+        },
+      },
       { new: true }
     );
 

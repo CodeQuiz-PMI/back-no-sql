@@ -54,6 +54,9 @@ export const login = async (req: Request, res: Response): Promise<unknown> => {
         currentQuestion: user.currentQuestion,
         trophies: user.trophies,
         totalPoints: user.totalPoints,
+        lifes: user.lifes,
+        hints: user.hints,
+        coins: user.coins,
       },
     });
   } catch (err: unknown) {

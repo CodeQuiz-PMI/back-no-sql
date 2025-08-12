@@ -13,10 +13,13 @@ export interface IQuestion extends Document {
   type: string;
   order: number;
   points: number;
+  hints: string;
+  coinsValues: number;
   createdAt: Date;
   section: Types.ObjectId;
 }
 
-export interface QuestionWithPopulatedSection extends Omit<IQuestion, "section"> {
-	section: ISection;
+export interface QuestionWithPopulatedSection
+  extends Omit<IQuestion, "section"> {
+  section: ISection;
 }

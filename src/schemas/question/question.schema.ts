@@ -13,6 +13,8 @@ export const QuestionSchema = new Schema<IQuestion>({
   type: { type: String, required: true },
   order: { type: Number, required: true },
   points: { type: Number, required: true },
+  coinsValues: { type: Number, require: true },
+  hints: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   section: { type: Schema.Types.ObjectId, ref: "Section", required: true },
 });
