@@ -1,5 +1,6 @@
 import routerLog from "./answerLog/answerLog.routes";
 import routerAuth from "./auth/auth.routes";
+import routerChallenge from "./challengeQuestion/challenge.routes";
 import routerLevel from "./level/level.routes";
 import routerQuestion from "./question/question.routes";
 import routerSection from "./section/section.routes";
@@ -12,4 +13,5 @@ export {
   routerQuestion,
   routerAuth,
   routerLog,
+  routerChallenge,
 };

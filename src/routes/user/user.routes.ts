@@ -53,7 +53,7 @@ routerUser.get("/", getAllUserController);
  *       404:
  *         description: Usuário não encontrado
  */
-routerUser.get("/:id", authMiddleware, asyncHandler(getUserByIdController));
+routerUser.get("/:id", asyncHandler(getUserByIdController));
 
 /**
  * @swagger

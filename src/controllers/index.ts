@@ -38,6 +38,13 @@ import {
   submitAnswerController,
   updateAnswerLogController,
 } from "./answerLog/answerLog.controller";
+import {
+  createChallengeController,
+  deleteChallengeController,
+  getAllChallengeController,
+  getChallengeByIdController,
+  updateChallengeController,
+} from "./challengeQuestion/challenge.controller";
 
 export {
   getAllUserController,
@@ -66,4 +73,9 @@ export {
   getAnswerLogsByUser,
   updateAnswerLogController,
   deleteAllAnswerLogsByUser,
+  createChallengeController,
+  getAllChallengeController,
+  getChallengeByIdController,
+  updateChallengeController,
+  deleteChallengeController,
 };

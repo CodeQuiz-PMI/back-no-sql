@@ -16,4 +16,5 @@ export const UserSchema = new Schema<IUser>({
   createdAt: { type: Date, default: Date.now },
   ownedMusics: [{ type: String }],
   ownedCursors: [{ type: String, default: [] }],
+  record: { type: Number },
 });

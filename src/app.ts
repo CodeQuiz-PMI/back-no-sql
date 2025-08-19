@@ -5,6 +5,7 @@ import { swaggerSpec } from "./docs/swagger";
 
 import {
   routerAuth,
+  routerChallenge,
   routerLevel,
   routerLog,
   routerQuestion,
@@ -22,6 +23,7 @@ app.use("/api/users", routerUser);
 app.use("/api/levels", routerLevel);
 app.use("/api/sections", routerSection);
 app.use("/api/questions", routerQuestion);
+app.use("/api/challenges", routerChallenge);
 
 app.use("/api/answerlogs", routerLog);
 
