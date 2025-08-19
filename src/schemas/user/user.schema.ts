@@ -14,4 +14,6 @@ export const UserSchema = new Schema<IUser>({
   coins: { type: Number, default: 0 },
   totalPoints: { type: Number, required: false },
   createdAt: { type: Date, default: Date.now },
+  ownedMusics: [{ type: String }],
+  ownedCursors: [{ type: String, default: [] }],
 });

@@ -13,4 +13,6 @@ export interface IUser extends Document {
   totalPoints: number;
   createdAt: Date;
   coins: number;
+  ownedMusics: string[];
+  ownedCursors: string[];
 }
