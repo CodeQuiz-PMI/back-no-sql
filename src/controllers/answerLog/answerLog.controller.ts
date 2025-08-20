@@ -45,7 +45,6 @@ export const submitAnswerController = async (
       userId,
       {
         $inc: {
-          totalPoints: pointsEarned,
           coins: coinsEarned,
         },
       },
