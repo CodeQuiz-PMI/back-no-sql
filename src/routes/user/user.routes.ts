@@ -6,7 +6,6 @@ import {
   updateUserController,
 } from "../../controllers";
 
-import { authMiddleware } from "../../middlewares/auth.middleware";
 import { asyncHandler } from "../../controllers/asyncHandler";
 
 const routerUser = Router();
@@ -93,7 +92,7 @@ routerUser.get("/:id", asyncHandler(getUserByIdController));
  *       404:
  *         description: Usuário não encontrado
  */
-routerUser.patch("/:id", authMiddleware, asyncHandler(updateUserController));
+routerUser.patch("/:id", asyncHandler(updateUserController));
 
 /**
  * @swagger
@@ -118,6 +117,6 @@ routerUser.patch("/:id", authMiddleware, asyncHandler(updateUserController));
  *       404:
  *         description: Usuário não encontrado
  */
-routerUser.delete("/:id", authMiddleware, asyncHandler(deleteUserController));
+routerUser.delete("/:id", asyncHandler(deleteUserController));
 
 export default routerUser;
