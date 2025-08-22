@@ -145,6 +145,7 @@ export const deleteAllAnswerLogsByUser = async (
           currentQuestion: "",
           trophies: 0,
           totalPoints: 0,
+          record: 0,
         },
       },
       { new: true }
