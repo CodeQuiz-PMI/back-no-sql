@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import {
   getAllUserController,
@@ -30,13 +30,11 @@ describe("Controlador de Usuário", () => {
   let statusMock: jest.Mock;
   let jsonMock: jest.Mock;
   let sendMock: jest.Mock;
-  let next: NextFunction;
 
   beforeEach(() => {
     statusMock = jest.fn().mockReturnThis();
     jsonMock = jest.fn();
     sendMock = jest.fn();
-    next = jest.fn();
 
     req = { params: {}, body: {} };
     res = {
@@ -59,7 +57,7 @@ describe("Controlador de Usuário", () => {
       const mockUsers = [{ id: "1" }, { id: "2" }];
       (User.find as jest.Mock).mockResolvedValue(mockUsers);
 
-      await getAllUserController(req as Request, res as Response, next);
+      await getAllUserController(req as Request, res as Response);
 
       expect(User.find).toHaveBeenCalled();
       expect(statusMock).toHaveBeenCalledWith(201);
