@@ -1,64 +1,64 @@
 import { Request, Response } from "express";
-import { Question } from "../../models";
-// import axios from "axios";
+import { QuestionService } from "../../services";
+
+const handleError = (res: Response, error: unknown) => {
+  console.error(error);
+  if (error instanceof Error) {
+    if (error.message.includes("não encontrada")) {
+      return res.status(404).json({ error: error.message });
+    }
+    return res.status(400).json({ error: error.message });
+  }
+  return res.status(500).json({ error: "Ocorreu um erro interno." });
+};
 
 export const createQuestionController = async (req: Request, res: Response) => {
   try {
-    const question = await Question.create(req.body);
+    const question = await QuestionService.create(req.body);
     res.status(201).json(question);
-  } catch (err: unknown) {
-    console.error(err);
-    if (err instanceof Error) {
-      res.status(400).json({ error: err.message });
-    } else {
-      res.status(400).json({ error: "Erro desconhecido." });
-    }
+  } catch (error) {
+    handleError(res, error);
   }
 };
 
 export const getAllQuestionController = async (_: Request, res: Response) => {
-  const questions = await Question.find().populate("section");
-  res.status(200).json(questions);
+  try {
+    const questions = await QuestionService.findAll();
+    res.status(200).json(questions);
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const getQuestionByIdController = async (
   req: Request,
   res: Response
-): Promise<unknown> => {
-  const question = await Question.findById(req.params.id).populate("section");
-  if (!question)
-    return res.status(404).json({ error: "Questão não encontrada" });
-  res.status(200).json(question);
+) => {
+  try {
+    const { id } = req.params;
+    const question = await QuestionService.findById(id);
+    res.status(200).json(question);
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const updateQuestionController = async (req: Request, res: Response) => {
-  const question = await Question.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-  });
-  res.status(201).json(question);
+  try {
+    const { id } = req.params;
+    const updatedQuestion = await QuestionService.update(id, req.body);
+    res.status(200).json(updatedQuestion);
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const deleteQuestionController = async (req: Request, res: Response) => {
-  await Question.findByIdAndDelete(req.params.id);
-  res.status(204).send();
+  try {
+    const { id } = req.params;
+    await QuestionService.deleteById(id);
+    res.status(204).send();
+  } catch (error) {
+    handleError(res, error);
+  }
 };
-
-// export const codeQuestionController = async (req: Request, res: Response) => {
-//   const { code, language = "python" } = req.body;
-
-//   try {
-//     const pistonResponse = await axios.post(
-//       "https://emkc.org/api/v2/piston/execute",
-//       {
-//         language,
-//         version: "*",
-//         files: [{ name: "main.py", content: code }],
-//       }
-//     );
-
-//     return res.json(pistonResponse.data);
-//   } catch (err) {
-//     console.error("Erro ao chamar Piston:", err);
-//     return res.status(500).json({ error: "Erro ao executar código" });
-//   }
-// };
