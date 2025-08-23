@@ -1,59 +1,73 @@
 import { Request, Response } from "express";
-import { ChallengeQuestion } from "../../models";
-// import axios from "axios";
+import { ChallengeQuestionService } from "../../services";
+
+const handleError = (res: Response, error: unknown) => {
+  console.error(error);
+  if (error instanceof Error) {
+    if (error.message.includes("não encontrada")) {
+      return res.status(404).json({ error: error.message });
+    }
+    return res.status(400).json({ error: error.message });
+  }
+  return res.status(500).json({ error: "Ocorreu um erro interno." });
+};
 
 export const createChallengeController = async (
   req: Request,
   res: Response
 ) => {
   try {
-    const question = await ChallengeQuestion.create(req.body);
+    const question = await ChallengeQuestionService.create(req.body);
     res.status(201).json(question);
-  } catch (err: unknown) {
-    console.error(err);
-    if (err instanceof Error) {
-      res.status(400).json({ error: err.message });
-    } else {
-      res.status(400).json({ error: "Erro desconhecido." });
-    }
+  } catch (error) {
+    handleError(res, error);
   }
 };
 
 export const getAllChallengeController = async (_: Request, res: Response) => {
-  const questions = await ChallengeQuestion.find();
-  res.status(200).json(questions);
+  try {
+    const questions = await ChallengeQuestionService.findAll();
+    res.status(200).json(questions);
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const getChallengeByIdController = async (
   req: Request,
   res: Response
-): Promise<unknown> => {
-  const question = await ChallengeQuestion.findById(req.params.id).populate(
-    "section"
-  );
-  if (!question)
-    return res.status(404).json({ error: "Questão não encontrada" });
-  res.status(200).json(question);
+) => {
+  try {
+    const { id } = req.params;
+    const question = await ChallengeQuestionService.findById(id);
+    res.status(200).json(question);
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const updateChallengeController = async (
   req: Request,
   res: Response
 ) => {
-  const question = await ChallengeQuestion.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    {
-      new: true,
-    }
-  );
-  res.status(201).json(question);
+  try {
+    const { id } = req.params;
+    const updatedQuestion = await ChallengeQuestionService.update(id, req.body);
+    res.status(200).json(updatedQuestion);
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const deleteChallengeController = async (
   req: Request,
   res: Response
 ) => {
-  await ChallengeQuestion.findByIdAndDelete(req.params.id);
-  res.status(204).send();
+  try {
+    const { id } = req.params;
+    await ChallengeQuestionService.deleteById(id);
+    res.status(204).send();
+  } catch (error) {
+    handleError(res, error);
+  }
 };

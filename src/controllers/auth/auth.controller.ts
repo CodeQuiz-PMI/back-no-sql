@@ -1,71 +1,41 @@
 import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { User } from "../../models";
+import { AuthService } from "../../services";
 
-export const register = async (
-  req: Request,
-  res: Response
-): Promise<unknown> => {
+const handleAuthError = (res: Response, error: unknown) => {
+  console.error(error);
+
+  if (error instanceof Error) {
+    switch (error.message) {
+      case "E-mail já cadastrado":
+        return res.status(400).json({ message: error.message });
+      case "Usuário não encontrado":
+        return res.status(404).json({ message: error.message });
+      case "Senha incorreta":
+        return res.status(401).json({ message: error.message });
+      default:
+        return res.status(500).json({ error: "Erro interno no servidor." });
+    }
+  }
+
+  return res.status(500).json({ error: "Ocorreu um erro desconhecido." });
+};
+
+export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, password } = req.body;
-    const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return res.status(400).json({ message: "E-mail já cadastrado" });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
-    return res
-      .status(201)
-      .json({ id: user._id, name: user.name, email: user.email });
-  } catch (err: unknown) {
-    console.error(err);
-    if (err instanceof Error) {
-      return res.status(400).json({ error: err.message });
-    }
-    return res.status(400).json({ error: "Erro desconhecido." });
+    const newUser = await AuthService.register({ name, email, password });
+    res.status(201).json(newUser);
+  } catch (error) {
+    handleAuthError(res, error);
   }
 };
 
-export const login = async (req: Request, res: Response): Promise<unknown> => {
+export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user)
-      return res.status(404).json({ message: "Usuário não encontrado" });
-
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) return res.status(401).json({ message: "Senha incorreta" });
-
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET || "codequiz_secret",
-      { expiresIn: "24h" }
-    );
-
-    return res.status(201).json({
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        currentLevel: user.currentLevel || "Fase 1",
-        currentSection: user.currentSection,
-        currentQuestion: user.currentQuestion,
-        trophies: user.trophies,
-        totalPoints: user.totalPoints,
-        lifes: user.lifes,
-        hints: user.hints,
-        coins: user.coins,
-        record: user.record,
-        ownedMusics: user.ownedMusics,
-      },
-    });
-  } catch (err: unknown) {
-    console.error(err);
-    if (err instanceof Error) {
-      return res.status(400).json({ error: err.message });
-    }
-    return res.status(400).json({ error: "Erro desconhecido." });
+    const result = await AuthService.login({ email, password });
+    res.status(200).json(result);
+  } catch (error) {
+    handleAuthError(res, error);
   }
 };
