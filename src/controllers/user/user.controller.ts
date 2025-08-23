@@ -1,63 +1,52 @@
-import { Request, RequestHandler, Response } from "express";
-import bcrypt from "bcryptjs";
-import { AnswerLog, User } from "../../models";
+import { Request, Response } from "express";
+import { UserService } from "../../services";
 
-export const getAllUserController: RequestHandler = async (
-  req: Request,
-  res: Response
-) => {
-  const user = await User.find();
-  res.status(201).json(user);
+const handleError = (res: Response, error: unknown) => {
+  console.error(error);
+  if (error instanceof Error) {
+    if (error.message.includes("não encontrado")) {
+      return res.status(404).json({ error: error.message });
+    }
+    return res.status(400).json({ error: error.message });
+  }
+  return res.status(500).json({ error: "Ocorreu um erro interno." });
 };
 
-export const getUserByIdController = async (
-  req: Request,
-  res: Response
-): Promise<unknown> => {
-  const newUser = req.params.id;
-  const user = await User.findById(newUser);
-  if (!user) return res.status(400).json({ error: "Usuário não encontrado" });
-  res.status(201).json(user);
+export const getAllUserController = async (_: Request, res: Response) => {
+  try {
+    const users = await UserService.findAll();
+    res.status(200).json(users);
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
+export const getUserByIdController = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const user = await UserService.findById(id);
+    res.status(200).json(user);
+  } catch (error) {
+    handleError(res, error);
+  }
 };
 
 export const updateUserController = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const updates = { ...req.body };
-
-    if (updates.password) {
-      const hashedPassword = await bcrypt.hash(updates.password, 10);
-      updates.password = hashedPassword;
-    }
-
-    const updatedUser = await User.findByIdAndUpdate(id, updates, {
-      new: true,
-    });
-
-    if (!updatedUser) {
-      return res.status(404).json({ error: "Usuário não encontrado." });
-    }
-
-    res.json(updatedUser);
+    const updatedUser = await UserService.update(id, req.body);
+    res.status(200).json(updatedUser);
   } catch (error) {
-    console.error("Erro ao atualizar usuário:", error);
-    res.status(500).json({ error: "Erro ao atualizar usuário." });
+    handleError(res, error);
   }
 };
 
 export const deleteUserController = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.id;
-
-    await User.findByIdAndDelete(userId);
-
-    await AnswerLog.deleteMany({ user: userId });
-
+    const { id } = req.params;
+    await UserService.deleteById(id);
     res.status(204).send();
   } catch (error) {
-    console.error("Erro ao deletar usuário e logs:", error);
-    res
-      .status(500)
-      .json({ error: "Erro ao deletar usuário e logs de respostas." });
+    handleError(res, error);
   }
 };
