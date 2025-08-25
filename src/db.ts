@@ -7,7 +7,6 @@ export const connectDatabase = async (): Promise<void> => {
   const MONGO_URI = process.env.MONGO_URI as string;
   if (!MONGO_URI) {
     console.error("❌ MONGO_URI não definida no .env");
-    process.exit(1);
   }
 
   try {
@@ -15,6 +14,5 @@ export const connectDatabase = async (): Promise<void> => {
     console.log("✅ Conectado ao MongoDB com sucesso!");
   } catch (error) {
     console.error("❌ Erro ao conectar no MongoDB:", error);
-    process.exit(1);
   }
 };
