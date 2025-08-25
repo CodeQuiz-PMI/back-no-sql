@@ -69,24 +69,12 @@ export const AnswerLogService = {
 
     const { question } = await findQuestionWithDetails(existingLog.question);
 
-    const oldPoints = existingLog.pointsEarned;
     const isCorrect = userAnswer.trim() === question.correctResponse.trim();
-    const newPoints = isCorrect ? question.points : 0;
 
     existingLog.userAnswer = userAnswer;
     existingLog.isCorrect = isCorrect;
-    existingLog.pointsEarned = newPoints;
 
-    const pointsDifference = newPoints - oldPoints;
-
-    const [updatedLog] = await Promise.all([
-      existingLog.save(),
-      User.findByIdAndUpdate(existingLog.user, {
-        $inc: { totalPoints: pointsDifference },
-      }),
-    ]);
-
-    return updatedLog;
+    return existingLog;
   },
 
   async deleteAllLogsByUser(userId: string) {
